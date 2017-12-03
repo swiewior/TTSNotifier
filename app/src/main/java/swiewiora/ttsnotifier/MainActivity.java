@@ -55,8 +55,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
                                 ? listPreference.getEntries()[index]
                                 : null);
 
-            } else
-                if (preference instanceof RingtonePreference) {
+            } else if (preference instanceof RingtonePreference) {
                 // For ringtone preferences, look up the correct display value
                 // using RingtoneManager.
                 if (TextUtils.isEmpty(stringValue)) {
@@ -120,13 +119,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setupActionBar();
-
-        // Display the fragment as the main content.
-        getFragmentManager().beginTransaction()
-                .add(android.R.id.content, new GeneralPreferenceFragment())
-                .add(android.R.id.content, new NotificationPreferenceFragment())
-                .commit();
+        setupActionBar();
     }
 
     /**
@@ -154,7 +147,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
-        //loadHeadersFromResource(R.xml.pref_headers, target);
+        loadHeadersFromResource(R.xml.pref_headers, target);
     }
 
     /**
@@ -178,7 +171,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
-            //setHasOptionsMenu(true);
+            setHasOptionsMenu(true);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
@@ -192,8 +185,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                //startActivity(new Intent(getActivity(), MainActivity.class));
-                getActivity().onBackPressed();
+                startActivity(new Intent(getActivity(), MainActivity.class));
                 return true;
             }
             return super.onOptionsItemSelected(item);

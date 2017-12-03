@@ -8,13 +8,27 @@
         android:title="@string/pref_header_general" />
 
     <header
+        android:fragment="swiewiora.ttsnotifier.MainActivity$TTSPreferenceFragment"
+        android:icon="@drawable/ic_sync_black_24dp"
+        android:title="@string/pref_header_tts" />
+
+    <header
         android:fragment="swiewiora.ttsnotifier.MainActivity$NotificationPreferenceFragment"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/pref_header_notifications" />
 
     <header
-        android:fragment="swiewiora.ttsnotifier.MainActivity$DataSyncPreferenceFragment"
+        android:fragment="swiewiora.ttsnotifier.MainActivity$DeviceSettingsPreferenceFragment"
         android:icon="@drawable/ic_sync_black_24dp"
-        android:title="@string/pref_header_data_sync" />
+        android:title="@string/pref_header_device" />
 
+    <header
+        android:fragment="swiewiora.ttsnotifier.MainActivity$QuietTimePreferenceFragment"
+        android:icon="@drawable/ic_sync_black_24dp"
+        android:title="@string/pref_header_quiet_time" />
+
+    <header
+        android:fragment="swiewiora.ttsnotifier.MainActivity$OthersPreferenceFragment"
+        android:icon="@drawable/ic_sync_black_24dp"
+        android:title="@string/pref_header_others" />
 </preference-headers>

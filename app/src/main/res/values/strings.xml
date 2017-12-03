@@ -72,4 +72,9 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+    <string name="pref_header_device">Device settings</string>
+    <string name="pref_header_quiet_time">Quiet Time</string>
+    <string name="pref_header_others">Others</string>
+    <string name="pref_header_tts">TTS Settings</string>
 </resources>

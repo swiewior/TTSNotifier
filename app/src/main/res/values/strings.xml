@@ -77,4 +77,8 @@
     <string name="pref_header_quiet_time">Quiet Time</string>
     <string name="pref_header_others">Others</string>
     <string name="pref_header_tts">TTS Settings</string>
+
+    <string name="app_list">App List</string>
+    <string name="app_list_summary">List installed apps which can be ignored.</string>
+
 </resources>

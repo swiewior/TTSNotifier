@@ -3,6 +3,7 @@ package swiewiora.ttsnotifier;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -170,7 +171,10 @@ public class MainActivity extends AppCompatPreferenceActivity {
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment {
+    public static class GeneralPreferenceFragment extends PreferenceFragment
+            implements Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
+        private Preference pStatus;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -181,8 +185,13 @@ public class MainActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("example_text"));
-            bindPreferenceSummaryToValue(findPreference("example_list"));
+//            bindPreferenceSummaryToValue(findPreference("example_text"));
+//            bindPreferenceSummaryToValue(findPreference("example_list"));
+            pStatus = findPreference(getString(R.string.key_status));
+            pStatus.setOnPreferenceClickListener(this);
+//            findPreference(getString(R.string.key_appList))
+//                    .setIntent(new Intent(getActivity(), AppList.class));
+
         }
 
         @Override
@@ -194,6 +203,14 @@ public class MainActivity extends AppCompatPreferenceActivity {
             }
             return super.onOptionsItemSelected(item);
         }
+
+        public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+            if (key.equals(getString(R.string.key_ttsStream))) {
+//                Common.setVolumeStream(getActivity());
+            }
+        }
+
+
     }
 
     /**

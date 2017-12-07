@@ -73,10 +73,24 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
 
+    <!--MY STRINGS-->
+    <!--Headers-->
     <string name="pref_header_device">Device settings</string>
     <string name="pref_header_quiet_time">Quiet Time</string>
     <string name="pref_header_others">Others</string>
     <string name="pref_header_tts">TTS Settings</string>
+
+
+
+    <!--General Preferences-->
+    <string name="service_running">VN service is running</string>
+    <string name="service_suspended">VN service is suspended</string>
+    <string name="service_disabled">VN service is disabled</string>
+    <string name="status_summary_notification_access_enabled">
+        Open the Android notification access settings to disable VN</string>
+    <string name="status_summary_notification_access_disabled">
+        Open the Android notification access settings to enable VN</string>
+    <string name="status_summary_suspended">Select to activate VN.</string>
 
     <string name="app_list">App List</string>
     <string name="app_list_summary">List installed apps which can be ignored.</string>

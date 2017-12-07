@@ -1,6 +1,9 @@
 package swiewiora.ttsnotifier;
 
 import android.annotation.TargetApi;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,14 +16,19 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -205,12 +213,50 @@ public class MainActivity extends AppCompatPreferenceActivity {
         }
 
         public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
-            if (key.equals(getString(R.string.key_ttsStream))) {
+//            if (key.equals(getString(R.string.key_ttsStream))) {
 //                Common.setVolumeStream(getActivity());
+//            }
+        }
+
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            if (preference == pStatus && Service.isRunning() && Service.isSuspended()) {
+                Service.toggleSuspend();
+                return true;
+            }
+            return false;
+        }
+
+        private void updateStatus() {
+            if (Service.isSuspended() && Service.isRunning()) {
+                pStatus.setTitle(R.string.service_suspended);
+                pStatus.setSummary(R.string.status_summary_suspended);
+                pStatus.setIntent(null);
+            } else {
+                pStatus.setTitle(Service.isRunning() ? R.string.service_running : R.string.service_disabled);
+                if (NotificationManagerCompat.getEnabledListenerPackages(getActivity()).contains(getActivity().getPackageName())) {
+                    pStatus.setSummary(R.string.status_summary_notification_access_enabled);
+                } else {
+                    pStatus.setSummary(R.string.status_summary_notification_access_disabled);
+                }
+                pStatus.setIntent(Common.getNotificationListenerSettingsIntent());
             }
         }
 
+        @Override
+        public void onResume() {
+            super.onResume();
+            Common.getPrefs(getActivity()).registerOnSharedPreferenceChangeListener(this);
+            Service.registerOnStatusChangeListener(statusListener);
+            updateStatus();
+        }
 
+        @Override
+        public void onPause() {
+            Service.unregisterOnStatusChangeListener(statusListener);
+            Common.getPrefs(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
+            super.onPause();
+        }
     }
 
     /**

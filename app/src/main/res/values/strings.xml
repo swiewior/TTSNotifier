@@ -81,16 +81,15 @@
     <string name="pref_header_tts">TTS Settings</string>
 
 
-
     <!--General Preferences-->
-    <string name="service_running">VN service is running</string>
-    <string name="service_suspended">VN service is suspended</string>
-    <string name="service_disabled">VN service is disabled</string>
+    <string name="service_running">TTSN service is running</string>
+    <string name="service_suspended">TTSN service is suspended</string>
+    <string name="service_disabled">TTSN service is disabled</string>
     <string name="status_summary_notification_access_enabled">
-        Open the Android notification access settings to disable VN</string>
+        Open the Android notification access settings to disable TTSN</string>
     <string name="status_summary_notification_access_disabled">
-        Open the Android notification access settings to enable VN</string>
-    <string name="status_summary_suspended">Select to activate VN.</string>
+        Open the Android notification access settings to enable TTSN</string>
+    <string name="status_summary_suspended">Select to activate TTSN.</string>
 
     <string name="app_list">App List</string>
     <string name="app_list_summary">List installed apps which can be ignored.</string>

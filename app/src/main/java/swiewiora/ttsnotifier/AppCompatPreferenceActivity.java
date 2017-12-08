@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
 
     private AppCompatDelegate mDelegate;
+    private String label, packageName;
+    private boolean enabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,5 +107,17 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
             mDelegate = AppCompatDelegate.create(this, null);
         }
         return mDelegate;
+    }
+
+    String getLabel() {
+        return label;
+    }
+
+    String getPackage() {
+        return packageName;
+    }
+
+    boolean getEnabled() {
+        return enabled;
     }
 }

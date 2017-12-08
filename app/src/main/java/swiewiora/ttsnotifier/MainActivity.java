@@ -180,8 +180,15 @@ public class MainActivity extends AppCompatPreferenceActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment
-            implements Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
+            implements Preference.OnPreferenceClickListener,
+            SharedPreferences.OnSharedPreferenceChangeListener {
         private Preference pStatus;
+        private final Service.OnStatusChangeListener statusListener = new Service.OnStatusChangeListener() {
+            @Override
+            public void onStatusChanged() {
+                updateStatus();
+            }
+        };
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -195,6 +202,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
             // guidelines.
 //            bindPreferenceSummaryToValue(findPreference("example_text"));
 //            bindPreferenceSummaryToValue(findPreference("example_list"));
+
             pStatus = findPreference(getString(R.string.key_status));
             pStatus.setOnPreferenceClickListener(this);
 //            findPreference(getString(R.string.key_appList))
@@ -239,6 +247,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
                 } else {
                     pStatus.setSummary(R.string.status_summary_notification_access_disabled);
                 }
+
                 pStatus.setIntent(Common.getNotificationListenerSettingsIntent());
             }
         }
@@ -246,7 +255,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
         @Override
         public void onResume() {
             super.onResume();
-            Common.getPrefs(getActivity()).registerOnSharedPreferenceChangeListener(this);
+//            Common.getPrefs(getActivity()).registerOnSharedPreferenceChangeListener(this);
             Service.registerOnStatusChangeListener(statusListener);
             updateStatus();
         }
@@ -254,7 +263,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
         @Override
         public void onPause() {
             Service.unregisterOnStatusChangeListener(statusListener);
-            Common.getPrefs(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
+//            Common.getPrefs(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
             super.onPause();
         }
     }

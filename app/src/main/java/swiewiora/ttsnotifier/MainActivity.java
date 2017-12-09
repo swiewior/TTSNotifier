@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            Common.init(getActivity());
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
 
@@ -205,8 +206,8 @@ public class MainActivity extends AppCompatPreferenceActivity {
 
             pStatus = findPreference(getString(R.string.key_status));
             pStatus.setOnPreferenceClickListener(this);
-//            findPreference(getString(R.string.key_appList))
-//                    .setIntent(new Intent(getActivity(), AppList.class));
+            findPreference(getString(R.string.key_appList))
+                    .setIntent(new Intent(getActivity(), AppList.class));
 
         }
 

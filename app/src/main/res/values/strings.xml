@@ -93,5 +93,12 @@
 
     <string name="app_list">App List</string>
     <string name="app_list_summary">List installed apps which can be ignored.</string>
+    <string name="app_is_ignored">%s is ignored</string>
+    <string name="app_is_not_ignored">%s is not ignored</string>
+
+    <!-- menu/app_list.xml-->
+    <string name="ignore_all">Ignore All</string>
+    <string name="ignore_none">Ignore None</string>
+    <string name="filter">Filter</string>
 
 </resources>

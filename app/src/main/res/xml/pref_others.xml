@@ -8,9 +8,5 @@
         android:key="@string/key_notify_log"
         android:title="@string/notify_log"
         android:summary="@string/notify_log_summary" />
-    <Preference
-        android:key="@string/key_support"
-        android:title="@string/support"
-        android:summary="@string/support_summary" />
 
 </PreferenceScreen>

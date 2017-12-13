@@ -74,29 +74,6 @@ public class MainActivity extends AppCompatPreferenceActivity {
                         index >= 0
                                 ? listPreference.getEntries()[index]
                                 : null);
-
-            } else if (preference instanceof RingtonePreference) {
-                // For ringtone preferences, look up the correct display value
-                // using RingtoneManager.
-                if (TextUtils.isEmpty(stringValue)) {
-                    // Empty values correspond to 'silent' (no ringtone).
-                    preference.setSummary(R.string.pref_ringtone_silent);
-
-                } else {
-                    Ringtone ringtone = RingtoneManager.getRingtone(
-                            preference.getContext(), Uri.parse(stringValue));
-
-                    if (ringtone == null) {
-                        // Clear the summary if there was a lookup error.
-                        preference.setSummary(null);
-                    } else {
-                        // Set the summary to reflect the new ringtone display
-                        // name.
-                        String name = ringtone.getTitle(preference.getContext());
-                        preference.setSummary(name);
-                    }
-                }
-
             } else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
@@ -549,9 +526,6 @@ public class MainActivity extends AppCompatPreferenceActivity {
             } else if (preference == pNotifyLog) {
                 MyDialog.show(getFragmentManager(), MyDialog.ID.LOG);
                 return true;
-            } else if (preference == pSupport) {
-                MyDialog.show(getFragmentManager(), MyDialog.ID.SUPPORT);
-                return true;
             }
             return false;
         }
@@ -564,10 +538,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
             DEVICE_STATE,
             QUIET_START,
             QUIET_END,
-            LOG,
-            SUPPORT,
-            DONATE,
-            WALLET,
+            LOG
         }
 
         private final TimePickerDialog.OnTimeSetListener sTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
@@ -589,20 +560,6 @@ public class MainActivity extends AppCompatPreferenceActivity {
             MyDialog dialogFragment = new MyDialog();
             dialogFragment.setArguments(bundle);
             dialogFragment.show(fm, id.name());
-        }
-
-        /**
-         * @return The intent for Google Wallet, otherwise null if installation is not found.
-         */
-        private Intent getWalletIntent() {
-            String walletPackage = "com.google.android.apps.gmoney";
-            PackageManager pm = getActivity().getPackageManager();
-            try {
-                pm.getPackageInfo(walletPackage, PackageManager.GET_ACTIVITIES);
-                return pm.getLaunchIntentForPackage(walletPackage);
-            } catch (PackageManager.NameNotFoundException e) {
-                return null;
-            }
         }
 
         @Override
@@ -656,97 +613,6 @@ public class MainActivity extends AppCompatPreferenceActivity {
                                 }
                             })
                             .create();
-                case SUPPORT:
-                    return new AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.support)
-                            .setItems(R.array.support_items, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int item) {
-                                    switch (item) {
-                                        case 0: // Donate
-                                            MyDialog.show(getFragmentManager(), ID.DONATE);
-                                            break;
-                                        case 1: // Rate/Comment
-                                            Intent iMarket = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.pilot51.voicenotify"));
-                                            iMarket.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            try {
-                                                startActivity(iMarket);
-                                            } catch (ActivityNotFoundException e) {
-                                                e.printStackTrace();
-                                                Toast.makeText(getActivity(), R.string.error_market, Toast.LENGTH_LONG).show();
-                                            }
-                                            break;
-                                        case 2: // Contact developer
-                                            Intent iEmail = new Intent(Intent.ACTION_SEND);
-                                            iEmail.setType("plain/text");
-                                            iEmail.putExtra(Intent.EXTRA_EMAIL, new String[] {getString(R.string.dev_email)});
-                                            iEmail.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
-                                            String version = null;
-                                            try {
-                                                version = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
-                                            } catch (PackageManager.NameNotFoundException e) {
-                                                e.printStackTrace();
-                                            }
-                                            iEmail.putExtra(Intent.EXTRA_TEXT,
-                                                    getString(R.string.email_body,
-                                                            version,
-                                                            Build.VERSION.RELEASE,
-                                                            Build.ID,
-                                                            Build.MANUFACTURER + " " + Build.BRAND + " " + Build.MODEL));
-                                            try {
-                                                startActivity(iEmail);
-                                            } catch (ActivityNotFoundException e) {
-                                                e.printStackTrace();
-                                                Toast.makeText(getActivity(), R.string.error_email, Toast.LENGTH_LONG).show();
-                                            }
-                                            break;
-                                        case 3: // Translations
-                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://getlocalization.com/voicenotify")));
-                                            break;
-                                        case 4: // Source Code
-                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/pilot51/voicenotify")));
-                                            break;
-                                    }
-                                }
-                            }).create();
-                case DONATE:
-                    return new AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.donate)
-                            .setItems(R.array.donate_services, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int item) {
-                                    switch (item) {
-                                        case 0: // Google Wallet
-                                            MyDialog.show(getFragmentManager(), ID.WALLET);
-                                            break;
-                                        case 1: // PayPal
-                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://paypal.com/cgi-bin/webscr?"
-                                                    + "cmd=_donations&business=pilota51%40gmail%2ecom&lc=US&item_name=Voice%20Notify&"
-                                                    + "no_note=0&no_shipping=1&currency_code=USD")));
-                                            break;
-                                    }
-                                }
-                            }).create();
-                case WALLET:
-                    final Intent walletIntent = getWalletIntent();
-                    AlertDialog.Builder dlg = new AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.donate_wallet_title)
-                            .setMessage(R.string.donate_wallet_message)
-                            .setNegativeButton(android.R.string.cancel, null);
-                    if (walletIntent != null) {
-                        dlg.setPositiveButton(R.string.donate_wallet_launch_app, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                startActivity(walletIntent);
-                            }
-                        });
-                    } else {
-                        dlg.setPositiveButton(R.string.donate_wallet_launch_web, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://wallet.google.com")));
-                            }
-                        });
-                    }
-                    return dlg.create();
             }
             return null;
         }

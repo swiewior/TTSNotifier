@@ -222,9 +222,9 @@ public class MainActivity extends AppCompatPreferenceActivity {
         }
 
         public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
-//            if (key.equals(getString(R.string.key_ttsStream))) {
-//                Common.setVolumeStream(getActivity());
-//            }
+            if (key.equals(getString(R.string.key_ttsStream))) {
+                Common.setVolumeStream(getActivity());
+            }
         }
 
         @Override
@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
         @Override
         public void onResume() {
             super.onResume();
-//            Common.getPrefs(getActivity()).registerOnSharedPreferenceChangeListener(this);
+            Common.getPrefs(getActivity()).registerOnSharedPreferenceChangeListener(this);
             Service.registerOnStatusChangeListener(statusListener);
             updateStatus();
         }
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
         @Override
         public void onPause() {
             Service.unregisterOnStatusChangeListener(statusListener);
-//            Common.getPrefs(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
+            Common.getPrefs(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
             super.onPause();
         }
     }
@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+//            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
         }
 
         @Override

@@ -1,10 +1,17 @@
 package swiewiora.ttsnotifier;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -27,6 +34,7 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.List;
@@ -187,7 +195,8 @@ public class MainActivity extends AppCompatPreferenceActivity {
             implements Preference.OnPreferenceClickListener,
             SharedPreferences.OnSharedPreferenceChangeListener {
         private Preference pStatus;
-        private final Service.OnStatusChangeListener statusListener = new Service.OnStatusChangeListener() {
+        private final Service.OnStatusChangeListener statusListener =
+                new Service.OnStatusChangeListener() {
             @Override
             public void onStatusChanged() {
                 updateStatus();
@@ -286,12 +295,6 @@ public class MainActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_tts);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-//            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-
             Preference pTTS = findPreference(getString(R.string.key_ttsSettings));
             Intent ttsIntent = getTtsIntent();
             if (ttsIntent != null) {
@@ -349,7 +352,6 @@ public class MainActivity extends AppCompatPreferenceActivity {
                 Common.setVolumeStream(getActivity());
             }
         }
-
     }
 
     /**
@@ -357,7 +359,8 @@ public class MainActivity extends AppCompatPreferenceActivity {
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class NotificationPreferenceFragment extends PreferenceFragment {
+    public static class NotificationPreferenceFragment extends PreferenceFragment
+            implements SharedPreferences.OnSharedPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -380,6 +383,52 @@ public class MainActivity extends AppCompatPreferenceActivity {
             }
             return super.onOptionsItemSelected(item);
         }
+
+        public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+            if (key.equals(getString(R.string.key_ttsStream))) {
+                Common.setVolumeStream(getActivity());
+            }
+        }
+    }
+
+    /**
+     * This fragment shows notification preferences only. It is used when the
+     * activity is showing a two-pane settings UI.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class DeviceSettingsPreferenceFragment extends PreferenceFragment
+            implements Preference.OnPreferenceClickListener {
+        private Preference pDeviceState;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            Common.init(getActivity());
+            addPreferencesFromResource(R.xml.pref_device);
+            setHasOptionsMenu(true);
+
+            pDeviceState = findPreference(getString(R.string.key_device_state));
+            pDeviceState.setOnPreferenceClickListener(this);
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), MainActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            if (preference == pDeviceState) {
+                MyDialog.show(getFragmentManager(), MyDialog.ID.DEVICE_STATE);
+                return true;
+            }
+            return false;
+        }
     }
 
     /**
@@ -388,6 +437,8 @@ public class MainActivity extends AppCompatPreferenceActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class DataSyncPreferenceFragment extends PreferenceFragment {
+//            implements Preference.OnPreferenceClickListener,
+//            SharedPreferences.OnSharedPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -417,48 +468,16 @@ public class MainActivity extends AppCompatPreferenceActivity {
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class DeviceSettingsPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_device);
-            setHasOptionsMenu(true);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    /**
-     * This fragment shows notification preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class QuietTimePreferenceFragment extends PreferenceFragment {
+//            implements Preference.OnPreferenceClickListener,
+//            SharedPreferences.OnSharedPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_quiet_time);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+
         }
 
         @Override
@@ -478,6 +497,8 @@ public class MainActivity extends AppCompatPreferenceActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class OthersPreferenceFragment extends PreferenceFragment {
+//            implements Preference.OnPreferenceClickListener,
+//            SharedPreferences.OnSharedPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -499,6 +520,201 @@ public class MainActivity extends AppCompatPreferenceActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public static class MyDialog extends DialogFragment {
+        private static final String KEY_ID = "id";
+
+        private enum ID {
+            DEVICE_STATE,
+            QUIET_START,
+            QUIET_END,
+            LOG,
+            SUPPORT,
+            DONATE,
+            WALLET,
+        }
+
+        private final TimePickerDialog.OnTimeSetListener sTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                Common.getPrefs(getActivity()).edit().putInt(getString(R.string.key_quietStart), hourOfDay * 60 + minute).apply();
+            }
+        };
+        private final TimePickerDialog.OnTimeSetListener eTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                Common.getPrefs(getActivity()).edit().putInt(getString(R.string.key_quietEnd), hourOfDay * 60 + minute).apply();
+            }
+        };
+
+        public MyDialog() {}
+
+        private static void show(FragmentManager fm, ID id) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(KEY_ID, id);
+            MyDialog dialogFragment = new MyDialog();
+            dialogFragment.setArguments(bundle);
+            dialogFragment.show(fm, id.name());
+        }
+
+        /**
+         * @return The intent for Google Wallet, otherwise null if installation is not found.
+         */
+        private Intent getWalletIntent() {
+            String walletPackage = "com.google.android.apps.gmoney";
+            PackageManager pm = getActivity().getPackageManager();
+            try {
+                pm.getPackageInfo(walletPackage, PackageManager.GET_ACTIVITIES);
+                return pm.getLaunchIntentForPackage(walletPackage);
+            } catch (PackageManager.NameNotFoundException e) {
+                return null;
+            }
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            ID id = (ID)getArguments().getSerializable(KEY_ID);
+            switch (id) {
+                case DEVICE_STATE:
+                    final CharSequence[] items = getResources().getStringArray(R.array.device_states);
+                    return new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.device_state_dialog_title)
+                            .setMultiChoiceItems(items,
+                                    new boolean[] {
+                                            Common.getPrefs(getActivity()).getBoolean(Common.KEY_SPEAK_SCREEN_OFF, true),
+                                            Common.getPrefs(getActivity()).getBoolean(Common.KEY_SPEAK_SCREEN_ON, true),
+                                            Common.getPrefs(getActivity()).getBoolean(Common.KEY_SPEAK_HEADSET_OFF, true),
+                                            Common.getPrefs(getActivity()).getBoolean(Common.KEY_SPEAK_HEADSET_ON, true),
+                                            Common.getPrefs(getActivity()).getBoolean(Common.KEY_SPEAK_SILENT_ON, false)
+                                    },
+                                    new DialogInterface.OnMultiChoiceClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                            if (which == 0) { // Screen off
+                                                Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_SCREEN_OFF, isChecked).apply();
+                                            } else if (which == 1) { // Screen on
+                                                Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_SCREEN_ON, isChecked).apply();
+                                            } else if (which == 2) { // Headset off
+                                                Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_HEADSET_OFF, isChecked).apply();
+                                            } else if (which == 3) { // Headset on
+                                                Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_HEADSET_ON, isChecked).apply();
+                                            } else if (which == 4) { // Silent/vibrate
+                                                Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_SILENT_ON, isChecked).apply();
+                                            }
+                                        }
+                                    }
+                            ).create();
+                case QUIET_START:
+                    int quietStart = Common.getPrefs(getActivity()).getInt(getString(R.string.key_quietStart), 0);
+                    return new TimePickerDialog(getActivity(), sTimeSetListener,
+                            quietStart / 60, quietStart % 60, false);
+                case QUIET_END:
+                    int quietEnd = Common.getPrefs(getActivity()).getInt(getString(R.string.key_quietEnd), 0);
+                    return new TimePickerDialog(getActivity(), eTimeSetListener,
+                            quietEnd / 60, quietEnd % 60, false);
+                case LOG:
+                    return new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.notify_log)
+                            .setView(new NotificationList(getActivity()))
+                            .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create();
+                case SUPPORT:
+                    return new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.support)
+                            .setItems(R.array.support_items, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int item) {
+                                    switch (item) {
+                                        case 0: // Donate
+                                            MyDialog.show(getFragmentManager(), ID.DONATE);
+                                            break;
+                                        case 1: // Rate/Comment
+                                            Intent iMarket = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.pilot51.voicenotify"));
+                                            iMarket.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            try {
+                                                startActivity(iMarket);
+                                            } catch (ActivityNotFoundException e) {
+                                                e.printStackTrace();
+                                                Toast.makeText(getActivity(), R.string.error_market, Toast.LENGTH_LONG).show();
+                                            }
+                                            break;
+                                        case 2: // Contact developer
+                                            Intent iEmail = new Intent(Intent.ACTION_SEND);
+                                            iEmail.setType("plain/text");
+                                            iEmail.putExtra(Intent.EXTRA_EMAIL, new String[] {getString(R.string.dev_email)});
+                                            iEmail.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
+                                            String version = null;
+                                            try {
+                                                version = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
+                                            } catch (PackageManager.NameNotFoundException e) {
+                                                e.printStackTrace();
+                                            }
+                                            iEmail.putExtra(Intent.EXTRA_TEXT,
+                                                    getString(R.string.email_body,
+                                                            version,
+                                                            Build.VERSION.RELEASE,
+                                                            Build.ID,
+                                                            Build.MANUFACTURER + " " + Build.BRAND + " " + Build.MODEL));
+                                            try {
+                                                startActivity(iEmail);
+                                            } catch (ActivityNotFoundException e) {
+                                                e.printStackTrace();
+                                                Toast.makeText(getActivity(), R.string.error_email, Toast.LENGTH_LONG).show();
+                                            }
+                                            break;
+                                        case 3: // Translations
+                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://getlocalization.com/voicenotify")));
+                                            break;
+                                        case 4: // Source Code
+                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/pilot51/voicenotify")));
+                                            break;
+                                    }
+                                }
+                            }).create();
+                case DONATE:
+                    return new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.donate)
+                            .setItems(R.array.donate_services, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int item) {
+                                    switch (item) {
+                                        case 0: // Google Wallet
+                                            MyDialog.show(getFragmentManager(), ID.WALLET);
+                                            break;
+                                        case 1: // PayPal
+                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://paypal.com/cgi-bin/webscr?"
+                                                    + "cmd=_donations&business=pilota51%40gmail%2ecom&lc=US&item_name=Voice%20Notify&"
+                                                    + "no_note=0&no_shipping=1&currency_code=USD")));
+                                            break;
+                                    }
+                                }
+                            }).create();
+                case WALLET:
+                    final Intent walletIntent = getWalletIntent();
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.donate_wallet_title)
+                            .setMessage(R.string.donate_wallet_message)
+                            .setNegativeButton(android.R.string.cancel, null);
+                    if (walletIntent != null) {
+                        dlg.setPositiveButton(R.string.donate_wallet_launch_app, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(walletIntent);
+                            }
+                        });
+                    } else {
+                        dlg.setPositiveButton(R.string.donate_wallet_launch_web, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://wallet.google.com")));
+                            }
+                        });
+                    }
+                    return dlg.create();
+            }
+            return null;
         }
     }
 }

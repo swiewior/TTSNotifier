@@ -194,4 +194,35 @@
     <string name="audio_focus">Pause/dim media</string>
     <string name="audio_focus_summary">Request other media to pause/dim when speaking</string>
 
+    <!-- MainActivity.java and xml/mydialog.xml -->
+    <string name="test">Test</string>
+    <string name="notify_log">Notification Log</string>
+    <string name="notify_log_summary">List last 20 notifications. Displays time, app name, message, and ignore reasons.</string>
+
+    <!--Support-->
+    <string name="support">Support Voice Notify</string>
+    <string name="donate">Donate</string>
+    <string-array name="support_items">
+        <item>@string/donate</item>
+        <item>Rate/Comment</item>
+        <item>Contact Developer</item>
+        <item>Translations</item>
+        <item>Source Code</item>
+    </string-array>
+    <string name="donate_wallet_title">Donate - Google Wallet</string>
+    <string name="donate_wallet_message">If you are in the United States and would like to donate via Google Wallet, simply use the Send Money feature and address it to pilota51@gmail.com.\nUnfortunately, Send Money is not available outside the US.\n\nThank you for using and supporting Voice Notify!</string>
+    <string name="donate_wallet_launch_app">Launch Wallet App</string>
+    <string name="donate_wallet_launch_web">Open Wallet Website</string>
+    <string name="error_market">Error: Unable to find Google Play Store installed.</string>
+    <string name="error_email">Error: Unable to find an installed email app.</string>
+
+    <string name="dev_email">pilota51@gmail.com</string>
+    <string name="email_subject">Contacting about Voice Notify</string>
+    <string name="email_body">\n\nVN version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>
+    <string-array name="donate_services">
+        <item>Google Wallet</item>
+        <item>PayPal</item>
+    </string-array>
+
+
 </resources>

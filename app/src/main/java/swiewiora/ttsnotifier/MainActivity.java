@@ -170,20 +170,18 @@ public class MainActivity extends AppCompatPreferenceActivity {
         loadHeadersFromResource(R.xml.pref_headers, target);
     }
 
-
     /**
      * This method stops fragment injection in malicious applications.
      * Make sure to deny any unknown fragments here.
      */
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
-                || GeneralPreferenceFragment.class.getName().equals(fragmentName)
-                || DataSyncPreferenceFragment.class.getName().equals(fragmentName)
-                || TTSPreferenceFragment.class.getName().equals(fragmentName)
-                || NotificationPreferenceFragment.class.getName().equals(fragmentName)
-                || DeviceSettingsPreferenceFragment.class.getName().equals(fragmentName)
-                || QuietTimePreferenceFragment.class.getName().equals(fragmentName)
-                || OthersPreferenceFragment.class.getName().equals(fragmentName);
+        || GeneralPreferenceFragment.class.getName().equals(fragmentName)
+        || TTSPreferenceFragment.class.getName().equals(fragmentName)
+        || NotificationPreferenceFragment.class.getName().equals(fragmentName)
+        || DeviceSettingsPreferenceFragment.class.getName().equals(fragmentName)
+        || QuietTimePreferenceFragment.class.getName().equals(fragmentName)
+        || OthersPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     /**
@@ -432,52 +430,25 @@ public class MainActivity extends AppCompatPreferenceActivity {
     }
 
     /**
-     * This fragment shows data and sync preferences only. It is used when the
+     * This fragment shows quiet time preferences only. It is used when the
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class DataSyncPreferenceFragment extends PreferenceFragment {
-//            implements Preference.OnPreferenceClickListener,
-//            SharedPreferences.OnSharedPreferenceChangeListener {
+    public static class QuietTimePreferenceFragment extends PreferenceFragment
+            implements Preference.OnPreferenceClickListener {
+        private Preference pQuietStart, pQuietEnd;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_data_sync);
-            setHasOptionsMenu(true);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    /**
-     * This fragment shows notification preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class QuietTimePreferenceFragment extends PreferenceFragment {
-//            implements Preference.OnPreferenceClickListener,
-//            SharedPreferences.OnSharedPreferenceChangeListener {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+            super.onCreate(savedInstanceState);Common.init(getActivity());
+            Common.init(getActivity());
             addPreferencesFromResource(R.xml.pref_quiet_time);
             setHasOptionsMenu(true);
 
-
+            pQuietStart = findPreference(getString(R.string.key_quietStart));
+            pQuietStart.setOnPreferenceClickListener(this);
+            pQuietEnd = findPreference(getString(R.string.key_quietEnd));
+            pQuietEnd.setOnPreferenceClickListener(this);
         }
 
         @Override
@@ -488,6 +459,18 @@ public class MainActivity extends AppCompatPreferenceActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
+        }
+
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            if (preference == pQuietStart) {
+                MyDialog.show(getFragmentManager(), MyDialog.ID.QUIET_START);
+                return true;
+            } else if (preference == pQuietEnd) {
+                MyDialog.show(getFragmentManager(), MyDialog.ID.QUIET_END);
+                return true;
+            }
+            return false;
         }
     }
 
@@ -502,14 +485,10 @@ public class MainActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            Common.init(getActivity());
             addPreferencesFromResource(R.xml.pref_others);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
         }
 
         @Override
@@ -607,11 +586,11 @@ public class MainActivity extends AppCompatPreferenceActivity {
                 case QUIET_START:
                     int quietStart = Common.getPrefs(getActivity()).getInt(getString(R.string.key_quietStart), 0);
                     return new TimePickerDialog(getActivity(), sTimeSetListener,
-                            quietStart / 60, quietStart % 60, false);
+                            quietStart / 60, quietStart % 60, true);
                 case QUIET_END:
                     int quietEnd = Common.getPrefs(getActivity()).getInt(getString(R.string.key_quietEnd), 0);
                     return new TimePickerDialog(getActivity(), eTimeSetListener,
-                            quietEnd / 60, quietEnd % 60, false);
+                            quietEnd / 60, quietEnd % 60, true);
                 case LOG:
                     return new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.notify_log)

@@ -1,27 +1,35 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- A 'parent' preference, which enables/disables child preferences (below)
-         when checked/unchecked. -->
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="notifications_new_message"
-        android:title="@string/pref_title_new_message_notifications" />
-
-    <!-- Allows the user to choose a ringtone in the 'notification' category. -->
-    <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
-    <!-- NOTE: RingtonePreference's summary should be set to its value by the activity code. -->
-    <RingtonePreference
-        android:defaultValue="content://settings/system/notification_sound"
-        android:dependency="notifications_new_message"
-        android:key="notifications_new_message_ringtone"
-        android:ringtoneType="notification"
-        android:title="@string/pref_title_ringtone" />
-
-    <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
-    <SwitchPreference
-        android:defaultValue="true"
-        android:dependency="notifications_new_message"
-        android:key="notifications_new_message_vibrate"
-        android:title="@string/pref_title_vibrate" />
+    <Preference
+        android:key="@string/key_ttsSettings"
+        android:title="@string/tts_settings"
+        android:summary="@string/tts_settings_summary" />
+    <EditTextPreference
+        android:key="@string/key_ttsString"
+        android:title="@string/tts_message"
+        android:summary="@string/tts_message_summary"
+        android:dialogMessage="@string/tts_message_dialog"
+        android:defaultValue="@string/ttsString_default_value" />
+    <ListPreference
+        android:key="@string/key_ttsStream"
+        android:title="@string/tts_stream"
+        android:summary="@string/tts_stream_summary"
+        android:entries="@array/stream_name"
+        android:entryValues="@array/stream_value"
+        android:defaultValue="3" />
+    <EditTextPreference
+        android:key="@string/key_ttsDelay"
+        android:title="@string/tts_delay"
+        android:summary="@string/tts_delay_summary"
+        android:dialogMessage="@string/tts_delay_dialog_msg"
+        android:digits="0123456789"
+        android:inputType="number" />
+    <EditTextPreference
+        android:key="@string/key_tts_repeat"
+        android:title="@string/tts_repeat"
+        android:summary="@string/tts_repeat_summary"
+        android:dialogMessage="@string/tts_repeat_dialog_msg"
+        android:digits="0123456789"
+        android:inputType="number" />
 
 </PreferenceScreen>

@@ -220,6 +220,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
             findPreference(getString(R.string.key_appList))
                     .setIntent(new Intent(getActivity(), AppList.class));
 
+            updateStatus();
         }
 
         @Override
@@ -475,13 +476,14 @@ public class MainActivity extends AppCompatPreferenceActivity {
     }
 
     /**
-     * This fragment shows notification preferences only. It is used when the
+     * This fragment shows other preferences only. It is used when the
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class OthersPreferenceFragment extends PreferenceFragment {
-//            implements Preference.OnPreferenceClickListener,
-//            SharedPreferences.OnSharedPreferenceChangeListener {
+    public static class OthersPreferenceFragment extends PreferenceFragment
+            implements Preference.OnPreferenceClickListener {
+        private Preference pTest, pNotifyLog, pSupport;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -489,6 +491,12 @@ public class MainActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_others);
             setHasOptionsMenu(true);
 
+            pTest = findPreference(getString(R.string.key_test));
+            pTest.setOnPreferenceClickListener(this);
+            pNotifyLog = findPreference(getString(R.string.key_notify_log));
+            pNotifyLog.setOnPreferenceClickListener(this);
+            pSupport = findPreference(getString(R.string.key_support));
+            pSupport.setOnPreferenceClickListener(this);
         }
 
         @Override
@@ -499,6 +507,53 @@ public class MainActivity extends AppCompatPreferenceActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
+        }
+
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            if (preference == pTest) {
+                if (!AppList.findOrAddApp(getActivity().getPackageName(), getActivity()).getEnabled()) {
+                    Toast.makeText(getActivity(), getString(R.string.test_ignored), Toast.LENGTH_LONG).show();
+                }
+                final NotificationManager notificationManager = (NotificationManager)getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+                if (notificationManager != null) {
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            String id = "test";
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                NotificationChannel channel = notificationManager.getNotificationChannel(id);
+                                if (channel == null) {
+                                    channel = new NotificationChannel(id, getString(R.string.test), NotificationManager.IMPORTANCE_LOW);
+                                    channel.setDescription(getString(R.string.notification_channel_desc));
+                                    notificationManager.createNotificationChannel(channel);
+                                }
+                            }
+                            PendingIntent pi = PendingIntent.getActivity(getActivity(),
+                                    0, getActivity().getIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
+                            NotificationCompat.Builder builder =
+                                    new NotificationCompat.Builder(getActivity(), id)
+                                            .setAutoCancel(true)
+                                            .setContentIntent(pi)
+                                            .setSmallIcon(R.drawable.icon)
+                                            .setTicker(getString(R.string.test_ticker))
+                                            .setSubText(getString(R.string.test_subtext))
+                                            .setContentTitle(getString(R.string.test_content_title))
+                                            .setContentText(getString(R.string.test_content_text))
+                                            .setContentInfo(getString(R.string.test_content_info));
+                            notificationManager.notify(0, builder.build());
+                        }
+                    }, 5000);
+                }
+                return true;
+            } else if (preference == pNotifyLog) {
+                MyDialog.show(getFragmentManager(), MyDialog.ID.LOG);
+                return true;
+            } else if (preference == pSupport) {
+                MyDialog.show(getFragmentManager(), MyDialog.ID.SUPPORT);
+                return true;
+            }
+            return false;
         }
     }
 

@@ -184,21 +184,25 @@
     <string name="max_length_summary">Maximum message length to speak, larger messages will be truncated.</string>
     <string name="max_length_dialog_msg">Maximum message length to speak, larger messages will be truncated.</string>
     <string name="quiet_start">Quiet Time Start</string>
-    <string name="quiet_start_summary">Don\'t speak after this time.\nLeave the same as end to disable.</string>
+    <string name="quiet_start_summary">Don\'t speak after this time.\n
+        Leave the same as end to disable.</string>
     <string name="quiet_end">Quiet Time End</string>
-    <string name="quiet_end_summary">Don\'t speak before this time.\nLeave the same as start to disable.</string>
+    <string name="quiet_end_summary">Don\'t speak before this time.\n
+        Leave the same as start to disable.</string>
     <string name="support_summary">Donate, rate/comment, translations, source code, or contact the developer.</string>
     <string name="audio_focus">Pause/dim media</string>
     <string name="audio_focus_summary">Request other media to pause/dim when speaking</string>
 
     <!-- MainActivity.java and xml/mydialog.xml -->
     <string name="notify_log">Notification Log</string>
-    <string name="notify_log_summary">List last 20 notifications. Displays time, app name, message, and ignore reasons.</string>
+    <string name="notify_log_summary">List last 20 notifications.
+        Displays time, app name, message, and ignore reasons.</string>
 
     <!--Test-->
     <string name="test">Test</string>
     <string name="test_summary">Post a notification (delayed 5 seconds) to test current settings.</string>
-    <string name="test_ignored">Voice Notify is ignored in App List.\nTest will run, but notification will not be spoken.</string>
+    <string name="test_ignored">TTS Notifier is ignored in App List.\n
+        Test will run, but notification will not be spoken.</string>
     <string name="test_ticker">This is the ticker message</string>
     <string name="test_subtext">The Subtext</string>
     <string name="test_content_title">Content Title</string>

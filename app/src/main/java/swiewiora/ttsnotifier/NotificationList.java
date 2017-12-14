@@ -33,7 +33,7 @@ public class NotificationList extends ListView {
     NotificationList(Context context) {
         super(context);
         res = getResources();
-        setDivider(ResourcesCompat.getDrawable(getResources(), R.drawable.divider, null));
+        setDivider(res.getDrawable(R.drawable.divider));
         Adapter adapter = new Adapter();
         setAdapter(adapter);
     }

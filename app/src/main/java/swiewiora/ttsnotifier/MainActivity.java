@@ -459,7 +459,7 @@ public class MainActivity extends AppCompatPreferenceActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class OthersPreferenceFragment extends PreferenceFragment
             implements Preference.OnPreferenceClickListener {
-        private Preference pTest, pNotifyLog, pSupport;
+        private Preference pTest, pNotifyLog;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -472,8 +472,6 @@ public class MainActivity extends AppCompatPreferenceActivity {
             pTest.setOnPreferenceClickListener(this);
             pNotifyLog = findPreference(getString(R.string.key_notify_log));
             pNotifyLog.setOnPreferenceClickListener(this);
-            pSupport = findPreference(getString(R.string.key_support));
-            pSupport.setOnPreferenceClickListener(this);
         }
 
         @Override

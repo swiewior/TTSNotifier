@@ -1,7 +1,5 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- These settings headers are only used on tablets. -->
-
     <header
         android:fragment="swiewiora.ttsnotifier.MainActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
@@ -9,7 +7,7 @@
 
     <header
         android:fragment="swiewiora.ttsnotifier.MainActivity$TTSPreferenceFragment"
-        android:icon="@drawable/ic_sync_black_24dp"
+        android:icon="@drawable/ic_tts_black_24dp"
         android:title="@string/pref_header_tts" />
 
     <header
@@ -19,16 +17,16 @@
 
     <header
         android:fragment="swiewiora.ttsnotifier.MainActivity$DeviceSettingsPreferenceFragment"
-        android:icon="@drawable/ic_sync_black_24dp"
+        android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/pref_header_device" />
 
     <header
         android:fragment="swiewiora.ttsnotifier.MainActivity$QuietTimePreferenceFragment"
-        android:icon="@drawable/ic_sync_black_24dp"
+        android:icon="@drawable/ic_quiet_black_24dp"
         android:title="@string/pref_header_quiet_time" />
 
     <header
         android:fragment="swiewiora.ttsnotifier.MainActivity$OthersPreferenceFragment"
-        android:icon="@drawable/ic_sync_black_24dp"
+        android:icon="@drawable/ic_other_24dp"
         android:title="@string/pref_header_others" />
 </preference-headers>

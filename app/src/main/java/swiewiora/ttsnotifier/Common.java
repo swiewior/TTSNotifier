@@ -36,7 +36,6 @@ public class Common {
      */
     static void init(Context context) {
         if (prefs == null) {
-            PreferenceManager.setDefaultValues(context, R.xml.pref_data_sync, true);
             PreferenceManager.setDefaultValues(context, R.xml.pref_device, true);
             PreferenceManager.setDefaultValues(context, R.xml.pref_general, true);
             PreferenceManager.setDefaultValues(context, R.xml.pref_notification, true);
@@ -44,7 +43,6 @@ public class Common {
             PreferenceManager.setDefaultValues(context, R.xml.pref_quiet_time, true);
             PreferenceManager.setDefaultValues(context, R.xml.pref_tts, true);
             prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-//            convertOldStreamPref(context);
         }
         Database.init(context);
     }

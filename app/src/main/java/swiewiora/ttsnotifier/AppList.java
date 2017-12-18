@@ -74,7 +74,7 @@ public class AppList extends ListActivity {
                 adapter.notifyDataSetChanged();
             }
         });
-        //defEnable = Common.getPrefs(this).getBoolean(KEY_DEFAULT_ENABLE, true);
+        defEnable = Common.getPrefs(this).getBoolean(KEY_DEFAULT_ENABLE, true);
         updateAppsList();
     }
 
@@ -174,7 +174,7 @@ public class AppList extends ListActivity {
     static App findOrAddApp(String pkg, Context ctx) {
         synchronized (SYNC_APPS) {
             if (apps == null) {
-                //defEnable = Common.getPrefs(ctx).getBoolean(KEY_DEFAULT_ENABLE, true);
+                defEnable = Common.getPrefs(ctx).getBoolean(KEY_DEFAULT_ENABLE, true);
                 apps = Database.getApps();
             }
             for (App app : apps) {
@@ -223,7 +223,7 @@ public class AppList extends ListActivity {
     /** Set the default enabled value for new apps. */
     private void setDefaultEnable(boolean enable) {
         defEnable = enable;
-        //Common.getPrefs(this).edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).commit();
+        Common.getPrefs(this).edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).commit();
     }
 
     private class Adapter extends BaseAdapter implements Filterable {

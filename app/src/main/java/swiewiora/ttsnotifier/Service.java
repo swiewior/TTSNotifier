@@ -106,8 +106,6 @@ public class Service extends NotificationListenerService {
         Notification notification = sbn.getNotification();
         long msgTime = System.currentTimeMillis();
         String ticker = notification.tickerText != null ? notification.tickerText.toString() : null;
-        // Suppressing lint because documentation says extras added in API 19 when actually added in API 18.
-        // See reported issue: https://issuetracker.google.com/issues/69396548
         @SuppressLint("InlinedApi") Bundle extras = notification.extras;
         @SuppressLint("InlinedApi") String subtext = extras.getString(Notification.EXTRA_SUB_TEXT);
         @SuppressLint("InlinedApi") String contentTitle = extras.getString(Notification.EXTRA_TITLE);

@@ -237,7 +237,6 @@ public class MainActivity extends AppCompatPreferenceActivity {
                 } else {
                     pStatus.setSummary(R.string.status_summary_notification_access_disabled);
                 }
-
                 pStatus.setIntent(Common.getNotificationListenerSettingsIntent());
             }
         }

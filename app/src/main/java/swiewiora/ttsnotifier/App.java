@@ -19,18 +19,18 @@ class App {
      * @return This instance.
      */
     App updateDb() {
-//        Database.addOrUpdateApp(this);
+        Database.addOrUpdateApp(this);
         return this;
     }
 
     void setEnabled(boolean enable, boolean updateDb) {
         enabled = enable;
-//        if (updateDb) Database.updateAppEnable(this);
+        if (updateDb) Database.updateAppEnable(this);
     }
 
     /** Removes self from database. */
     void remove() {
-//        Database.removeApp(this);
+        Database.removeApp(this);
     }
 
     String getLabel() {

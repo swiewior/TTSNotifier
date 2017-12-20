@@ -4,8 +4,6 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.database.DataSetObserver;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -160,7 +157,8 @@ public class AppList extends ListActivity {
                 massIgnore(IGNORE_NONE);
                 return true;
             case R.id.filter:
-                ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(0, 0);
+                ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE))
+                        .toggleSoftInput(0, 0);
                 return true;
         }
         return false;
@@ -184,7 +182,8 @@ public class AppList extends ListActivity {
             }
             try {
                 PackageManager packMan = ctx.getPackageManager();
-                App app = new App(pkg, packMan.getApplicationInfo(pkg, 0).loadLabel(packMan).toString(), defEnable);
+                App app = new App(pkg, packMan.getApplicationInfo(pkg, 0)
+                        .loadLabel(packMan).toString(), defEnable);
                 apps.add(app.updateDb());
                 return app;
             } catch (PackageManager.NameNotFoundException e) {
@@ -210,12 +209,14 @@ public class AppList extends ListActivity {
         if (!app.getEnabled() & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_NONE)) {
             app.setEnabled(true, ignoreType == IGNORE_TOGGLE);
             if (ignoreType == IGNORE_TOGGLE) {
-                Toast.makeText(this, getString(R.string.app_is_not_ignored, app.getLabel()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.app_is_not_ignored, app.getLabel()), Toast.LENGTH_SHORT)
+                        .show();
             }
         } else if (app.getEnabled() & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_ALL)) {
             app.setEnabled(false, ignoreType == IGNORE_TOGGLE);
             if (ignoreType == IGNORE_TOGGLE) {
-                Toast.makeText(this, getString(R.string.app_is_ignored, app.getLabel()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.app_is_ignored, app.getLabel()), Toast.LENGTH_SHORT)
+                        .show();
             }
         }
     }
@@ -223,7 +224,7 @@ public class AppList extends ListActivity {
     /** Set the default enabled value for new apps. */
     private void setDefaultEnable(boolean enable) {
         defEnable = enable;
-        Common.getPrefs(this).edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).commit();
+        Common.getPrefs(this).edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).apply();
     }
 
     private class Adapter extends BaseAdapter implements Filterable {

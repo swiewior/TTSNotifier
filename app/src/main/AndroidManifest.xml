@@ -27,7 +27,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".AppList"></activity>
+        <activity android:name=".AppList" />
     </application>
 
 </manifest>

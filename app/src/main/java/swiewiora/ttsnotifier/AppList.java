@@ -39,6 +39,7 @@ public class AppList extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Common.init(this);
+        setTheme(R.style.AppListTheme);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         ListView lv = getListView();
         lv.setTextFilterEnabled(true);

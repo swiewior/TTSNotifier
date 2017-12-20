@@ -225,7 +225,7 @@ public class AppList extends ListActivity {
     /** Set the default enabled value for new apps. */
     private void setDefaultEnable(boolean enable) {
         defEnable = enable;
-        Common.getPrefs(this).edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).apply();
+        Common.getPrefs(this).edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).commit();
     }
 
     private class Adapter extends BaseAdapter implements Filterable {

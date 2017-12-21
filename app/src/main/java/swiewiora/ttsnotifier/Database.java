@@ -123,14 +123,19 @@ class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = database.getWritableDatabase();
         db.delete(TABLE_NAME, null, null);
         ContentValues values;
-        for (App app : list) {
-            values = new ContentValues();
-            values.put(COLUMN_PACKAGE,  app.getPackage());
-            values.put(COLUMN_LABEL,  app.getLabel());
-            values.put(COLUMN_ENABLED,  app.getEnabled() ? 1 : 0);
-            db.insert(TABLE_NAME, null, values);
+        try {
+            for (App app : list) {
+                values = new ContentValues();
+                values.put(COLUMN_PACKAGE, app.getPackage());
+                values.put(COLUMN_LABEL, app.getLabel());
+                values.put(COLUMN_ENABLED, app.getEnabled() ? 1 : 0);
+                db.insert(TABLE_NAME, null, values);
+            }
+        } catch(Exception e) {
+            Log.e("Problem", e + " ");
+        } finally {
+            db.close();
         }
-        db.close();
     }
 
     /**

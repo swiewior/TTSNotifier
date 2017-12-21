@@ -1,4 +1,4 @@
-Voice notification does pretty much what the app name says it does. It reads out your notifications for you so you don't have to read them yourself and it comes with some more features like caller name announcement, message reading, battery state announcement, location proximity announcement. It comes with lot of customisation options.
+TTS Notifier does pretty much what the app name says it does. It reads out your notifications for you so you don't have to read them yourself and it comes with some more features like caller name announcement, message reading, battery state announcement, location proximity announcement. It comes with lot of customisation options.
 
 FEATURES:
 - Widget to suspend VN
@@ -16,5 +16,5 @@ FEATURES:
 - Notification log
 - Post a test notification
 
-- Speaki can only read your notifications if your device Text-to-Speech support the notifications text language.
+- TTS Notifier can only read your notifications if your device Text-to-Speech support the notifications text language.
 - You can either use the default Text-To-Speech (TTS) engine, already built-in your mobile phone or any other TTS engine you find and download from the Google play store. 

@@ -1,3 +1,11 @@
+Project is based on open source project: https://github.com/pilot51/voicenotify  
+Original Author: Mark Injerd
+
+Course: Development of Applications for Mobile Devices II  
+Semestral project from programming in Android: TTS Notifier  
+Author: Sebastian Wiewióra  
+VSB - Technical University of Ostrava
+
 TTS Notifier does pretty much what the app name says it does. It reads out your notifications for you so you don't have to read them yourself and it comes with some more features like caller name announcement, message reading, battery state announcement, location proximity announcement. It comes with lot of customisation options.
 
 FEATURES:
@@ -15,6 +23,5 @@ FEATURES:
 - Repeat notifications at custom interval while screen off
 - Notification log
 - Post a test notification
-
 - TTS Notifier can only read your notifications if your device Text-to-Speech support the notifications text language.
 - You can either use the default Text-To-Speech (TTS) engine, already built-in your mobile phone or any other TTS engine you find and download from the Google play store. 
